@@ -1,0 +1,23 @@
+set number
+
+syntax enable
+filetype plugin indent on
+
+set statusline=%F
+set laststatus=2
+
+set backspace=indent,eol,start
+imap <C-f> <Right>
+inoremap [ []<left>
+inoremap ( ()<left>
+inoremap { {}<left>
+inoremap " ""<left>
+inoremap ' ''<left>
+
+set clipboard+=unnamed
+
+let g:netrw_liststyle = 3
+let g:netrw_keepdir = 0
+
+set wrap
+set breakindent

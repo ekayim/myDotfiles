@@ -1,0 +1,74 @@
+# .zshrc
+
+# fpath (path for autoload and compinit command)
+fpath=(~/.zsh/completion $fpath)
+# Note: set completion file in this directory by yourself
+# For example: `curl -o ~/.zsh/completion/_docker https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker` for docker completion (2/2/2021)
+
+# completion
+autoload -Uz compinit
+compinit
+
+# color
+autoload -Uz colors
+colors
+
+# general
+alias ls='ls -G'
+alias ll='ls -alFG'
+alias la='ls -a'
+setopt share_history
+
+# vim mode
+set -o vi
+bindkey -d
+bindkey -v
+bindkey "^j" vi-cmd-mode
+bindkey "^A" beginning-of-line
+bindkey "^K" kill-line
+bindkey "^H" backward-delete-char
+
+# run tmux on startup
+#if [ ! -n "$TMUX" ]; then
+#  # if a session already exists, attach it
+#  ID="`tmux ls`"
+#  if [ -z "$ID" ]; then
+#   tmux new-session && exit
+#  else
+#    ID="`echo $ID| cut -d: -f1 | head -n1`"
+#    tmux attach-session -t "$ID" && exit
+#  fi
+#fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/miyako/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/miyako/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/miyako/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/miyako/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# zsh prompt
+function zle-line-init zle-keymap-select {
+  case $KEYMAP in
+    vicmd)
+    PROMPT="
+[%{${fg[white]}%}NOR%{${reset_color}%}] %T:%~$ "
+    ;;
+
+    main|viins)
+    PROMPT="
+[%{${fg[cyan]}%}INS%{${reset_color}%}] %T:%~$ "
+    ;;
+  esac
+  zle reset-prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
